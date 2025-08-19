@@ -31,7 +31,7 @@ def test_calcular_valor_ok(mock_get):
     # simula resposta da API
     mock_response = MagicMock()
     mock_response.status_code = 200
-    mock_response.json.return_value = {"ticker": "PETR4", "preco": 37.50}
+    mock_response.json.return_value = {"ticker": "PETR4", "lastValue": 37.50}
     mock_get.return_value = mock_response
 
     valor, erro = calcular_valor("PETR4", 10)
