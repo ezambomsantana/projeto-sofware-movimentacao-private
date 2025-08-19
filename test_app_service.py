@@ -38,6 +38,7 @@ def test_calcular_valor_ok(mock_get):
 
     assert valor == 375.0
     assert erro is None
+    
     mock_get.assert_called_once_with("http://localhost:8080/stocks/PETR4", timeout=5)
 
 @patch("app_service.requests.get")
