@@ -28,11 +28,11 @@ jobs:
           pip install pytest-cov
 
       - name: Run tests and generate coverage
-        run: pytest --cov=app --cov-report=xml --cov-report=term --junitxml=pytest.xml
+        run: pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pytest-coverage-path: coverage.xml
-          junitxml-path: pytest.xml
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
