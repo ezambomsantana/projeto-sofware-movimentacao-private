@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify
 from app_service import validar_campos, calcular_valor, criar_objeto_movimentacao
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 # "Banco de dados" em memória
-movimentacoes = []
+client = MongoClient("mongodb://stocks:27017/") 
+db = client["movimentacoes"]
+movimentacoes_collection = db["movimentacoes"]  
+
+
+## docker run -p 27017:27017 -d --network=rede --name mongo mongo
 
 # ------------------------
 # Rotas
@@ -24,13 +30,18 @@ def criar_movimentacao():
 
     movimentacao = criar_objeto_movimentacao(data, valor_total)
 
-    movimentacoes.append(movimentacao)
+    result = movimentacoes_collection.insert_one(movimentacao)
+
+    movimentacao["_id"] = str(result.inserted_id)
     return jsonify(movimentacao), 201
 
 
 @app.route("/movimentacoes", methods=["GET"])
 def listar_movimentacoes():
-    return jsonify(movimentacoes)
+    docs = list(movimentacoes_collection.find())
+    for d in docs:
+        d["_id"] = str(d["_id"])
+    return jsonify(docs)
 
 
 if __name__ == "__main__":
