@@ -5,7 +5,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # "Banco de dados" em memória
-client = MongoClient("mongodb://stocks:27017/") 
+client = MongoClient("mongodb://mongo:27017/") 
 db = client["movimentacoes"]
 movimentacoes_collection = db["movimentacoes"]  
 
